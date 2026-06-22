@@ -1,9 +1,15 @@
 FROM node
 
+# Create app directory
 WORKDIR /app
 
-COPY . .
+# Install app dependencies (use package-lock if present)
+COPY package*.json ./
+RUN npm install --production || true
 
-RUN node index.js
+# Bundle app source
+COPY . ./
+
+EXPOSE 3000
 
 CMD ["node", "index.js"]
