@@ -7,7 +7,7 @@ services:
       context: .
     restart: always
     ports:
-      - "127.0.0.1:8080:8080"
+      - "3000:3000"
     environment:
       - PORT=3000
       - DB_HOST=db
