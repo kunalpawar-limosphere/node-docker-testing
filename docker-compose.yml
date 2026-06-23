@@ -1,0 +1,50 @@
+version: "2.4"
+
+services:
+  backend:
+    container_name: dispatch_backend
+    build:
+      context: .
+    restart: always
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      - PORT=3000
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=kunal      # match MYSQL_DATABASE from docker run example
+      - DB_USER=root       # using root as no MYSQL_USER/MYSQL_PASSWORD were provided in your run
+      - DB_PASSWORD=root123 # match MYSQL_ROOT_PASSWORD from docker run example
+      - NODE_ENV=development
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root123
+      - MYSQL_DATABASE=kunal
+      # NOTE: not setting MYSQL_USER/MYSQL_PASSWORD so only root exists (same as your docker run)
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    ports:
+      - "3306:3306"
+    networks:
+      - two-tier
+
+volumes:
+  db_data:
+
+networks:
+  two-tier:
+    driver: bridge
