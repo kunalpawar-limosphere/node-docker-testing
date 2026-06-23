@@ -20,6 +20,9 @@
   },
   "homepage": "https://github.com/kunalpawar-limosphere/node-docker-testing#readme",
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "mysql2": "^3.3.0",
+    "sequelize": "^6.32.1",
+    "dotenv": "^16.0.3"
   }
 }
